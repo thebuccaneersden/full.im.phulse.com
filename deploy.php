@@ -6,9 +6,58 @@ require 'config/deploy.php';
 
 $config = new Deploy_Config();
 
-server( 'droplet1', 'full.im.phulse.com', 22 )
-    ->user( $config->user )
-    ->env( 'deploy_path', $config->deploy_path )
-    ->identityFile( $config->id_rsa_pub, $config->id_rsa );
 
-set('repository', 'git@github.com:thebuccaneersden/full.im.phulse.com.git');
+// before( 'deploy', function() {
+//   writeln("<info>Deploying to</info> <fg=cyan>http://full.im.phulse.com</fg=cyan>");
+// });
+
+server( 'droplet1', 'full.im.phulse.com', 22 )
+  ->user( $config->user )
+  ->env( 'deploy_path', $config->deploy_path )
+  ->identityFile( $config->id_rsa_pub, $config->id_rsa );
+
+set( 'repository', 'git@github.com:thebuccaneersden/full.im.phulse.com.git' );
+
+task( 'deploy:vendors_npm', function () {
+  cd( env('release_path') );
+  run('npm i');
+});
+
+task( 'deploy:vendors_bower', function () {
+  cd( env('release_path') );
+  run('bower install');
+});
+
+task( 'reload:nginx', function () {
+  run('sudo service nginx reload');
+});
+
+task( 'deploy:start', function() {
+  writeln("<info>Deploying to</info> <fg=cyan>http://full.im.phulse.com</fg=cyan>");
+});
+
+task( 'deploy:finish', function() {
+  writeln("<info>Finished deployment to</info> <fg=cyan>http://full.im.phulse.com</fg=cyan>");
+});
+
+
+task('deploy', [
+    'deploy:start', /**/
+    'deploy:prepare',
+    'deploy:release',
+    'deploy:update_code',
+    'deploy:vendors',
+    'deploy:vendors_npm',
+    'deploy:vendors_bower',
+    'deploy:symlink',
+    'cleanup',
+    'reload:nginx'
+])->desc('Deploy your project');
+
+after('deploy', 'deploy:finish');
+
+
+
+// after( 'deploy:vendors', 'deploy:vendors_npm' );
+// after( 'deploy:vendors_npm', 'deploy:vendors_bower' );
+// after( 'deploy', 'deploy:done' );
