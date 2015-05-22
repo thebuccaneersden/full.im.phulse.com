@@ -34,7 +34,7 @@ return array(
     //'migrations_dir' => array('default' => 'migrations'),
     'migrations_dir' => array('default' => RUCKUSING_WORKING_BASE . '/migrations'),
     'db_dir' => RUCKUSING_WORKING_BASE . DIRECTORY_SEPARATOR . 'data',
-    'log_dir' => RUCKUSING_WORKING_BASE . DIRECTORY_SEPARATOR . 'logs',
+    'log_dir' => RUCKUSING_WORKING_BASE . DIRECTORY_SEPARATOR . 'logs/migrations',
     // 'db_dir' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data',
     // 'log_dir' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'logs',
     'ruckusing_base' => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'vendor/ruckusing/ruckusing-migrations' //dirname(__FILE__) . DIRECTORY_SEPARATOR . 'vendor/ruckusing/ruckusing-migrations/'
