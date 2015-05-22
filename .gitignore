@@ -1,3 +1,6 @@
 *deploy.php
 node_modules/*
 www/vendor/*
+vendor/*
+data/*
+logs/*
