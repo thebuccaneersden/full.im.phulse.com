@@ -1,8 +1,6 @@
 <?php
 // Router for PHP's local web server
-//var_dump( $_SERVER["REQUEST_URI"], substr( $_SERVER["REQUEST_URI"], 0, 5) );die();
-error_reporting(E_ALL);
-ini_set('display_errors',1);
+
 $mimetypes = [
   "3gp" => "video/3gpp",
   "apk" => "application/vnd.android.package-archive",
@@ -62,31 +60,45 @@ $mimetypes = [
 
 date_default_timezone_set("UTC");
 
-if (php_sapi_name() == "cli-server") {
+if( php_sapi_name() == "cli-server" )
+{
 
-  if( substr( $_SERVER["REQUEST_URI"], 0, 5) === '/api/' ) {
+  if( substr( $_SERVER["REQUEST_URI"], 0, 5) === '/api/' )
+  {
       require( './api/index.php' );
       die();
-  } else {
+  } else
+  {
     $request = $_SERVER["REQUEST_URI"];
-    if( $_SERVER["REQUEST_URI"] === '/' ) {
+    if( $_SERVER["REQUEST_URI"] === '/' )
+    {
       $request = '/index.html';
     }
     list( $request, ) = explode( '?', $request );
-    if( file_exists( "./www{$request}" ) ) {
+    
+    if( file_exists( "./www{$request}" ) )
+    {
       $requestExploded = explode( '.', $request );
       $extension = ( !empty( $requestExploded[sizeof($requestExploded)-1] ) ) ? $requestExploded[sizeof($requestExploded)-1] : null;
-      if( !empty( $extension ) && array_key_exists( $extension, $mimetypes ) ) {
+
+      if( !empty( $extension ) && array_key_exists( $extension, $mimetypes ) )
+      {
         $mimetype = $mimetypes[$extension];
-      } else {
+      } else
+      {
         $mimetype = $mimetypes['text'];
       }
+
       $file = file_get_contents( "./www/{$request}" );
       header("Content-Type: {$mimetype}");
       print( $file );
-    } else {
+
+    } else
+    {
       header("HTTP/1.1 404 Not Found");
-      die();
+      $file = file_get_contents( "./www/404.html" );
+      header("Content-Type: text/html");
+      print( $file );
     }
   }
 }
