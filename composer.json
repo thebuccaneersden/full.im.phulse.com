@@ -1,6 +1,7 @@
 {
     "require": {
         "monolog/monolog": "1.2.*",
-        "ruckusing/ruckusing-migrations": "1.1.0"
+        "ruckusing/ruckusing-migrations": "1.1.0",
+        "guzzlehttp/guzzle": "dev-master"
     }
 }
